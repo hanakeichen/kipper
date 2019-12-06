@@ -1,0 +1,15 @@
+array = []
+Assert(array.length == 0)
+array[0] = 1
+Assert(array[0] == undefined)
+array.push(1)
+Assert(array[0] == 1)
+array.push(2)
+Assert(array[1] == 2)
+array.push(3)
+Assert(array[2] == 3)
+array.push(4)
+Assert(array[3] == 4)
+array.push(5)
+Assert(array[4] == 5)
+Assert(array.length == 5)

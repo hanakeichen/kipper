@@ -1,0 +1,31 @@
+---
+Checks: '-*,
+bugprone-*,
+-bugprone-macro-parentheses,
+google-readability-casting,
+hicpp-*,
+-hicpp-avoid-c-arrays,
+-hicpp-no-array-decay,
+-hicpp-no-malloc,
+-hicpp-signed-bitwise,
+-hicpp-vararg,
+misc-*,
+-misc-non-private-member-variables-in-classes,
+modernize-*,
+-modernize-avoid-c-arrays,
+-modernize-use-nodiscard,
+performance-*,
+readability-*,
+-readability-function-size,
+-readability-identifier-naming,
+-readability-implicit-bool-conversion,
+-readability-magic-numbers,
+-readability-non-const-parameter,
+'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+CheckOptions:
+  - key:   modernize-use-equals-default.IgnoreMacros
+    value: '0'
+...
+

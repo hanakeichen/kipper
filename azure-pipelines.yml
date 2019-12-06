@@ -1,0 +1,98 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  strategy:
+    matrix:
+      Debug:
+        BuildType: Debug
+      Release:
+        BuildType: Release
+  steps:
+  - checkout: self
+    submodules: true
+  - script: |
+      choco install llvm -y
+    displayName: LLVM install
+  - task: CMake@1
+    inputs:
+      cmakeArgs: -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=$(BuildType) ..
+    displayName: CMake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=$(BuildType) ..
+  - script: |
+      cmake --build . --config $(BuildType) -j 4
+    workingDirectory: build
+    displayName: 'Build'
+  - script: |
+      ctest -C $(BuildType)
+    workingDirectory: build
+    displayName: 'Test'
+
+- job: macOS
+  pool:
+    name: 'Default'
+    demands:
+      - agent.os -equals Darwin
+      - cmake
+  strategy:
+    matrix:
+      Debug:
+        BuildType: Debug
+      Release:
+        BuildType: Release
+  steps:
+  - checkout: self
+    submodules: true
+  - script: |
+      brew install llvm
+      echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.bash_profile
+    displayName: LLVM install
+  - task: CMake@1
+    inputs:
+      cmakeArgs: -DCMAKE_BUILD_TYPE=$(BuildType) ..
+    displayName: CMake -DCMAKE_BUILD_TYPE=$(BuildType) ..
+  - script: |
+      cmake --build . -j 4
+    workingDirectory: build
+    displayName: 'Build'
+  - script: |
+      ctest
+    workingDirectory: build
+    displayName: 'Test'
+
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-18.04'
+  strategy:
+    matrix:
+      Debug:
+        BuildType: Debug
+      Release:
+        BuildType: Release
+  steps:
+  - checkout: self
+    submodules: true
+  - script: |
+      sudo apt-get update
+      sudo apt-get install gcc-8 g++-8 clang-tidy-8 -y
+      sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-8 1
+    displayName: Dependencies install
+  - task: CMake@1
+    inputs:
+      cmakeArgs: -DCMAKE_CXX_COMPILER="g++-8" -DCMAKE_BUILD_TYPE=$(BuildType) ..
+    displayName: CMake -DCMAKE_CXX_COMPILER="g++-8" -DCMAKE_BUILD_TYPE=$(BuildType) ..
+  - script: |
+      cmake --build . -j 4
+    workingDirectory: build
+    displayName: 'Build'
+  - script: |
+      ctest
+    workingDirectory: build
+    displayName: 'Test'
