@@ -4,7 +4,7 @@ An interpreter for KipperScript language(js--) written in C++17 for studying gar
 
 ## Code Status
 
-[![Build Status](https://dev.azure.com/chqc/kipper/_apis/build/status/kipper?branchName=master)](https://dev.azure.com/chqc/kipper/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/chqc/kipper/_apis/build/status/hanakeichen.kipper?branchName=master)](https://dev.azure.com/chqc/kipper/_build/latest?definitionId=3&branchName=master)
 
 ## Build from Source
 
@@ -21,6 +21,7 @@ An interpreter for KipperScript language(js--) written in C++17 for studying gar
 ```
 $ git clone https://github.com/hanakeichen/kipper
 $ cd kipper
+$ git submodule update --init
 $ mkdir build && cmake -S . -B build
 $ cmake -DCMAKE_BUILD_TYPE=Release --build ./build
 ```
