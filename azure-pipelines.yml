@@ -37,10 +37,7 @@ jobs:
 
 - job: macOS
   pool:
-    name: 'Default'
-    demands:
-      - agent.os -equals Darwin
-      - cmake
+    vmImage: 'macOS-10.15'
   strategy:
     matrix:
       Debug:
